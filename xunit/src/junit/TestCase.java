@@ -1,5 +1,6 @@
 package junit;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public abstract class TestCase implements Test{
@@ -10,8 +11,12 @@ public abstract class TestCase implements Test{
         this.fName = name;
     }
 
+    public String getTestName() {
+        return fName;
+    }
+
     @Override
-    public void run(TestResult result) {
+    public TestResult run(TestResult result) {
         result.startTest(this);
         setUp();
         try{
@@ -19,21 +24,26 @@ public abstract class TestCase implements Test{
         }catch (AssertionFailedError e){
             result.addFailure(this, e);
         }catch (Throwable e){
+            e.printStackTrace();
+            System.out.println(e.getCause());
             result.addError(this,e);
         }finally {
             tearDown();
         }
+        return result;
     }
 
-    protected void runTest() throws Throwable{
+    private void runTest() throws Throwable{
         Method runMethod = null;
         try{
             runMethod = getClass().getMethod(fName);
         }catch (NoSuchMethodException e){
             assertTrue("Method \""+fName+"\" not found", false);
         }
-        if(runMethod != null){
+        try{
             runMethod.invoke(this);
+        }catch (InvocationTargetException e){
+            throw e.getCause();
         }
     }
     protected abstract void setUp();
@@ -41,7 +51,7 @@ public abstract class TestCase implements Test{
 
     protected void assertTrue(boolean condition){
         if(!condition){
-            throw new AssertionFailedError();
+            throw new AssertionFailedError("assert condition is not true");
         }
     }
 
@@ -53,7 +63,7 @@ public abstract class TestCase implements Test{
 
     protected void asserEquals(Object expected, Object actual){
         if(!expected.equals(actual)){
-            throw new AssertionFailedError();
+            throw new AssertionFailedError(String.format("actual(%s) not equal to actual(%s)",actual,expected));
         }
     }
 }

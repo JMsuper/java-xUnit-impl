@@ -1,10 +1,10 @@
 package junit;
 
 public class TestFailure {
-    protected Test fFailedTest;
+    protected TestCase fFailedTest;
     protected Throwable fThrownException;
 
-    public TestFailure(Test fFailedTest, Throwable fThrownException) {
+    public TestFailure(TestCase fFailedTest, Throwable fThrownException) {
         this.fFailedTest = fFailedTest;
         this.fThrownException = fThrownException;
     }

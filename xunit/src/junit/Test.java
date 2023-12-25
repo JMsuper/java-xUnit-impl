@@ -1,5 +1,5 @@
 package junit;
 
 public interface Test {
-    void run(TestResult result);
+    TestResult run(TestResult result);
 }
