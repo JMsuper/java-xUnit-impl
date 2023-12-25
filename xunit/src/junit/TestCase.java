@@ -8,7 +8,8 @@ public abstract class TestCase implements Test{
     }
 
     @Override
-    public void run() {
+    public void run(TestResult result) {
+        result.startTest(this);
         runTest();
         setUp();
         tearDown();
