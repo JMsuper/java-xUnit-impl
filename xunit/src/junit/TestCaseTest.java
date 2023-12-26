@@ -1,50 +1,50 @@
 package junit;
 
+import junit.annotation.Test;
+
 public class TestCaseTest extends TestCase{
     public TestCaseTest(String name) {
         super(name);
     }
 
     public static TestSuite suite(){
-        TestSuite suite = new TestSuite();
-
-        suite.add(new TestCaseTest("testTemplateMethod"));
-        suite.add(new TestCaseTest("testResult"));
-        suite.add(new TestCaseTest("testFailedResultFormatting"));
-        suite.add(new TestCaseTest("testFailedResult"));
-        suite.add(new TestCaseTest("testSuite"));
-        return suite;
+        return new TestSuite(TestCaseTest.class);
     }
 
-    public void testTemplateMethod(){
+    @Test
+    public void templateMethod(){
         WasRun wasRun= new WasRun("testMethod");
         TestResult result = new TestResult();
         wasRun.run(result);
         Assert.assertEquals("setUp testMethod tearDown",wasRun.log);
     }
 
-    public void testResult(){
+    @Test
+    public void result(){
         WasRun wasRun= new WasRun("testMethod");
         TestResult result = new TestResult();
         wasRun.run(result);
         Assert.assertEquals("1 run, 0 failed",result.getSummary());
     }
 
-    public void testFailedResultFormatting(){
+    @Test
+    public void failedResultFormatting(){
         TestResult result = new TestResult();
         result.testStarted();
         result.testFailed();
         Assert.assertEquals("1 run, 1 failed",result.getSummary());
     }
 
-    public void testFailedResult(){
+    @Test
+    public void failedResult(){
         WasRun wasRun= new WasRun("testBrokenMethod");
         TestResult result = new TestResult();
         wasRun.run(result);
         Assert.assertEquals("1 run, 1 failed",result.getSummary());
     }
 
-    public void testSuite(){
+    @Test
+    public void tSuite(){
         TestSuite suite = new TestSuite();
         suite.add(new WasRun("testMethod"));
         suite.add(new WasRun("testBrokenMethod"));
