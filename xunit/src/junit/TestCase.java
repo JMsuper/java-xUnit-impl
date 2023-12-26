@@ -1,18 +1,32 @@
 package junit;
 
-public class TestCase {
-    private String name;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
-    public TestCase(String name){
+public class TestCase {
+    protected final String name;
+
+    public TestCase(String name) {
         this.name = name;
     }
 
-    public void setUp(){}
-    public void tearDown(){}
-
-    public TestResult run(TestResult result){
+    public void run(TestResult result) {
         result.testStarted();
         setUp();
 
+        try {
+            Method method = getClass().getMethod(name);
+            method.invoke(this);
+        } catch (Exception e) {
+            result.testFailed();
+        }finally {
+            tearDown();
+        }
+    }
+
+    public void tearDown() {
+    }
+
+    public void setUp() {
     }
 }

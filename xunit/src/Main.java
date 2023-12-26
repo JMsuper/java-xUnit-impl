@@ -1,7 +1,3 @@
-import junit.TestCaseTest;
-import junit.TestResult;
-import junit.TestSuite;
-
 public class Main {
     public static void main(String[] args) {
         testBootstrap();
